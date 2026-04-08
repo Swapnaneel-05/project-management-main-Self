@@ -2,7 +2,7 @@ import express from "express";
 import "dotenv/config";
 import cors from "cors";
 import { clerkMiddleware } from '@clerk/express'
-import { serve } from "inngest/express";
+
 import { inngest, functions } from "./inngest/index.js"
 
 
@@ -15,7 +15,7 @@ app.use(clerkMiddleware())
 app.get("/",(req,res)=>{
     res.send("server is live");
 })
-app.use("/api/inngest", serve({ client: inngest, functions }));
+
 
 
 const PORT = process.env.PORT || 5000
