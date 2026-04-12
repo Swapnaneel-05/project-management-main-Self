@@ -2,6 +2,8 @@ import express from "express";
 import "dotenv/config";
 import cors from "cors";
 import { clerkMiddleware } from '@clerk/express'
+import workspaceRouter from "./routes/workspaceRoutes.js";
+import { protect } from "./middlewares/authmiddleware.js";
 
 
 const app = express();
@@ -14,7 +16,8 @@ app.get("/",(req,res)=>{
     res.send("server is live");
 })
 
-
+//Routes
+app.use("/api/workspaces", protect, workspaceRouter)
 
 const PORT = process.env.PORT || 5000
 
