@@ -134,15 +134,26 @@ const syncWorkspaceMemberCreation = inngest.createFunction(
     id: "sync-workspace-member-from-clerk",
     triggers: [{ event: "clerk/organizationMembership.created" }],
   },
-  async ({ event }) => {
-    const { data } = event;
+  async ({ event, step }) => {
 
-    await prisma.workspaceMember.create({
-      data: {
-        userId: data.user_id,
-        workspaceId: data.organization_id,
-        role: (data.role_name || "member").toUpperCase(),
-      },
+    const data = event.data;
+
+    const userId = data.public_user_data?.user_id;
+    const workspaceId = data.organization?.id;
+    const role = (data.role || "member").toUpperCase();
+
+    if (!userId || !workspaceId) {
+      throw new Error("Missing userId or workspaceId");
+    }
+
+    await step.run("create-workspace-member", async () => {
+      await prisma.workspaceMember.create({
+        data: {
+          userId,
+          workspaceId,
+          role,
+        },
+      });
     });
   }
 );
