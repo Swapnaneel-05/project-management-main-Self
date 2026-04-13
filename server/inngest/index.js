@@ -1,5 +1,6 @@
 import { Inngest } from "inngest";
 import { prisma } from "../configs/prisma.js";
+import sendEmail from "../configs/nodemailer.js";
 
 // Create client
 export const inngest = new Inngest({ id: "Group13-Project" });
@@ -146,6 +147,48 @@ const syncWorkspaceMemberCreation = inngest.createFunction(
   }
 );
 
+//send email
+const sendTaskAssignmentEmail = inngest.createFunction(
+  {
+    id: "send-task-assignment-mail",
+    triggers: [{ event: "app/task.assigned" }],
+  },
+  async ({ event, step }) => {
+
+    const { taskId, origin } = event.data;
+
+    const task = await step.run("fetch-task", async () => {
+      return await prisma.task.findUnique({
+        where: { id: taskId },
+        include: { assignee: true, project: true }
+      });
+    });
+
+    if (!task) {
+      throw new Error("Task not found");
+    }
+
+    if (!task.assignee?.email) {
+      return;
+    }
+
+    await step.run("send-email", async () => {
+      await sendEmail({
+        to: task.assignee.email,
+        subject: `New task assignment in ${task.project.name}`,
+        body: `
+          <h3>Hi ${task.assignee.name},</h3>
+          <p>You have been assigned a new task.</p>
+          <p><strong>Task Title:</strong> ${task.title}</p>
+          <p><strong>Due Date:</strong> ${new Date(task.due_date).toLocaleDateString()}</p>
+          <a href="${origin}">View Task</a>
+        `
+      });
+    });
+
+  }
+);
+
 
 export const functions = [
   syncUserCreation,
@@ -155,4 +198,5 @@ export const functions = [
   syncWorkspaceDeletion,
   syncWorkspaceUpdation,
   syncWorkspaceMemberCreation,
+  sendTaskAssignmentEmail,
 ];
