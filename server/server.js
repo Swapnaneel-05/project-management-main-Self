@@ -11,7 +11,21 @@ import commentRouter from "./routes/commentRoutes.js";
 
 const app = express();
 
-app.use(cors())
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://project-management-main-self-front.vercel.app"
+  ],
+  credentials: true
+}));
+
+app.options("*", cors({
+  origin: [
+    "http://localhost:5173",
+    "https://project-management-main-self-front.vercel.app"
+  ],
+  credentials: true
+}));
 app.use(express.json())
 app.use(clerkMiddleware())
 
