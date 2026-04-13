@@ -12,18 +12,12 @@ import commentRouter from "./routes/commentRoutes.js";
 const app = express();
 
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://project-management-main-self-front.vercel.app"
-  ],
+  origin: true,
   credentials: true
 }));
 
 app.options("*", cors({
-  origin: [
-    "http://localhost:5173",
-    "https://project-management-main-self-front.vercel.app"
-  ],
+  origin: true,
   credentials: true
 }));
 app.use(express.json())
