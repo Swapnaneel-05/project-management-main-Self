@@ -3,7 +3,7 @@ import { prisma } from "../configs/prisma.js";
 import sendEmail from "../configs/nodemailer.js";
 
 // Create client
-export const inngest = new Inngest({ id: "Group13-Project" });
+export const inngest = new Inngest({ id: "Group13-Project", eventKey: process.env.INNGEST_EVENT_KEY, });
 
 
 // Create
