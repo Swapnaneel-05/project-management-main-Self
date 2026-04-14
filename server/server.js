@@ -7,15 +7,31 @@ import { protect } from "./middlewares/authmiddleware.js";
 import projectRouter from "./routes/projectRoutes.js";
 import taskRouter from "./routes/taskRoutes.js";
 import commentRouter from "./routes/commentRoutes.js";
-import workspaceRouter from "./routes/workspaceRoutes.js";
 
 
 const app = express();
 
+const allowedOrigins = [
+  process.env.CLIENT_URL || "https://project-management-main-self-front.vercel.app",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "http://localhost:3000"
+];
+
 app.use(cors({
-  origin: "https://project-management-main-self-front.vercel.app",
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    callback(new Error(`CORS policy does not allow access from origin ${origin}`));
+  },
   credentials: true
 }));
+app.options("*", cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
+
 app.use(express.json())
 app.use(clerkMiddleware())
 
