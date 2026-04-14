@@ -11,6 +11,18 @@ import commentRouter from "./routes/commentRoutes.js";
 
 const app = express();
 
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+//   res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+//   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+//   if (req.method === "OPTIONS") {
+//     return res.sendStatus(200);
+//   }
+
+//   next();
+// });
+
 const allowedOrigins = [
   process.env.CLIENT_URL || "https://project-management-main-self-front.vercel.app",
   "http://localhost:5173",
@@ -36,7 +48,7 @@ app.get("/",(req,res)=>{
 })
 
 //Routes
-app.use("/api/workspaces", protect, workspaceRouter)
+app.use("/api/workspaces", workspaceRouter)
 app.use("/api/projects",protect, projectRouter)
 app.use("/api/tasks",protect, taskRouter)
 app.use("/api/comments",protect, commentRouter)
