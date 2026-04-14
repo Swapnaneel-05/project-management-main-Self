@@ -53,8 +53,12 @@ app.use("/api/projects",protect, projectRouter)
 app.use("/api/tasks",protect, taskRouter)
 app.use("/api/comments",protect, commentRouter)
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000;
 
-app.listen(PORT,()=>{
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
     console.log(`Server is Running on ${PORT}`);
-})
+  });
+}
+
+export default app;
