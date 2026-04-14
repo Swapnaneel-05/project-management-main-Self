@@ -24,10 +24,8 @@ app.use((req, res, next) => {
 });
 
 const allowedOrigins = [
-  process.env.CLIENT_URL || "https://project-management-main-self-front.vercel.app",
-  "http://localhost:5173",
+  process.env.CLIENT_URL || "http://localhost:5173",
   "http://127.0.0.1:5173",
-  "http://localhost:3000"
 ];
 
 app.use(cors({
