@@ -136,14 +136,16 @@ const syncWorkspaceMemberCreation = inngest.createFunction(
   },
   async ({ event }) => {
     const { data } = event;
-    const userId = data?.user?.id ?? data?.user_id ?? data?.userId;
+    const userId = data?.user?.id ?? data?.user_id ?? data?.userId ?? data?.user?.user_id;
     const workspaceId = data?.organization?.id ?? data?.organization_id ?? data?.organizationId;
     const role = (data?.role || "org:member").replace("org:", "").toUpperCase();
 
     if (!userId || !workspaceId) {
-      console.log("Invalid clerk organization membership event payload:", JSON.stringify(data));
+      console.log("Invalid clerk organization membership event payload:", JSON.stringify(event, null, 2));
       throw new Error("Invalid clerk organization membership event payload");
     }
+
+    console.log("Clerk organization membership event fields:", { userId, workspaceId, role });
 
     await prisma.workspaceMember.create({
       data: {
