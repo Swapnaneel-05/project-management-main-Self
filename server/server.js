@@ -13,7 +13,7 @@ import workspaceRouter from "./routes/workspaceRoutes.js";
 const app = express();
 
 app.use(cors({
-  origin: true,
+  origin: "https://project-management-main-self-front.vercel.app",
   credentials: true
 }));
 app.use(express.json())
