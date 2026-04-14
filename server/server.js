@@ -7,6 +7,7 @@ import { protect } from "./middlewares/authmiddleware.js";
 import projectRouter from "./routes/projectRoutes.js";
 import taskRouter from "./routes/taskRoutes.js";
 import commentRouter from "./routes/commentRoutes.js";
+import workspaceRouter from "./routes/workspaceRoutes.js";
 
 
 const app = express();
