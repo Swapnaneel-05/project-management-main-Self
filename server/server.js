@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 
 const allowedOrigins = [
   process.env.CLIENT_URL || "http://localhost:5173",
-  "http://127.0.0.1:5173",
+  "http://127.0.0.1:5173" || "https://project-management-main-self-3.onrender.com",
 ];
 
 app.use(cors({
