@@ -53,10 +53,8 @@ app.use("/api/comments",protect, commentRouter)
 
 const PORT = process.env.PORT || 5000;
 
-if (!process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`Server is Running on ${PORT}`);
   });
-}
 
 export default app;
