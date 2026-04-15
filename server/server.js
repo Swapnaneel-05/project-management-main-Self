@@ -19,11 +19,13 @@ const app = express();
 //   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
 //   if (req.method === "OPTIONS") {
-//     return res.sendStatus(200);
-//   }
-
-//   next();
-// });
+  //     return res.sendStatus(200);
+  //   }
+  
+  //   next();
+  // });
+  
+app.use("/api/inngest", serve({ client: inngest, functions}));
 
 const allowedOrigins = [
   "https://project-management-main-self-3.onrender.com",
@@ -41,7 +43,6 @@ app.use(cors({
 }));
 
 
-app.use("/api/inngest", serve({ client: inngest, functions}));
 app.use(express.json())
 app.use(clerkMiddleware())
 
