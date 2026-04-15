@@ -44,6 +44,21 @@ app.use(cors({
 
 
 app.use(express.json())
+app.post("/api/webhooks/clerk", async (req, res) => {
+  try {
+    const event = req.body;
+
+    await inngest.send({
+      name: `clerk/${event.type}`,
+      data: event.data,
+    });
+
+    res.status(200).json({ received: true });
+  } catch (err) {
+    console.error("Webhook error:", err);
+    res.status(500).json({ error: "Webhook failed" });
+  }
+});
 app.use(clerkMiddleware())
 
 app.get("/",(req,res)=>{
