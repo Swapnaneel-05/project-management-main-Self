@@ -2,11 +2,13 @@ import express from "express";
 import "dotenv/config";
 import cors from "cors";
 import { clerkMiddleware } from '@clerk/express'
+import { serve } from "inngest/node"
 import workspaceRouter from "./routes/workspaceRoutes.js";
 import { protect } from "./middlewares/authMiddleware.js";
 import projectRouter from "./routes/projectRoutes.js";
 import taskRouter from "./routes/taskRoutes.js";
 import commentRouter from "./routes/commentRoutes.js";
+import { inngest, functions } from "./inngest/index.js";
 
 
 const app = express();
@@ -38,11 +40,13 @@ app.use(cors({
   credentials: true
 }));
 
+
 app.use(express.json())
 app.use(clerkMiddleware())
+app.use("/api/inngest", serve({ client: inngest, functions}));
 
 app.get("/",(req,res)=>{
-    res.send("server is live");
+  res.send("server is live");
 })
 
 //Routes
