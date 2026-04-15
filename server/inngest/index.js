@@ -16,12 +16,17 @@ const syncUserCreation = inngest.createFunction(
   async ({ event }) => {
     const { data } = event;
 
+    const email = data?.email_addresses?.[0]?.email_address || "";
+
     await prisma.user.upsert({
-      where: { id: data.id },
-      update: {},
+      where: { email }, // ✅ FIX: use email instead of id
+      update: {
+        name: `${data?.first_name || ""} ${data?.last_name || ""}`.trim(),
+        image: data?.image_url || "",
+      },
       create: {
         id: data.id,
-        email: data?.email_addresses?.[0]?.email_address || "",
+        email,
         name: `${data?.first_name || ""} ${data?.last_name || ""}`.trim(),
         image: data?.image_url || "",
       },
@@ -51,16 +56,17 @@ const syncUserUpdation = inngest.createFunction(
   async ({ event }) => {
     const { data } = event;
 
+    const email = data?.email_addresses?.[0]?.email_address || "";
+
     await prisma.user.upsert({
-      where: { id: data.id },
+      where: { email }, // ✅ FIX
       update: {
-        email: data?.email_addresses?.[0]?.email_address || "",
         name: `${data?.first_name || ""} ${data?.last_name || ""}`.trim(),
         image: data?.image_url || "",
       },
       create: {
         id: data.id,
-        email: data?.email_addresses?.[0]?.email_address || "",
+        email,
         name: `${data?.first_name || ""} ${data?.last_name || ""}`.trim(),
         image: data?.image_url || "",
       },
@@ -85,7 +91,7 @@ const syncWorkspaceCreation = inngest.createFunction(
       update: {},
       create: {
         id: data.created_by,
-        email: "",
+         email: `temp-${data.created_by}@temp.com`,
         name: "",
         image: "",
       },
