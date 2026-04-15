@@ -122,7 +122,7 @@ const workspaceSlice = createSlice({
         builder.addCase(fetchWorkspaces.fulfilled, (state,action)=>{
             state.workspaces = action.payload;
             if(action.payload.length > 0){
-                const localStorageCurrentWorkspaceId = localStorage.getItem('currentWorkspaceid');
+                const localStorageCurrentWorkspaceId = localStorage.getItem('currentWorkspaceId');
                 if(localStorageCurrentWorkspaceId){
                     const findWorkspace = action.payload.find((w)=> w.id === localStorageCurrentWorkspaceId);
                     if(findWorkspace){
